@@ -1,0 +1,41 @@
+# Use `just work 2023 01 1` to work on the specific binary for a specific day's problems
+work year day part:
+  cargo watch \
+    -x "check -p year-{{year}}-day-{{day}}" \
+    -s "just test {{part}} -p year-{{year}}-day-{{day}}" \
+    -s "just lint {{year}} {{day}}" \
+    -s "just bench {{year}} {{day}} {{part}}" \
+    -s "just flamegraph {{year}} {{day}} {{part}}"
+
+lint year day:
+  cargo clippy -p year-{{year}}-day-{{day}}
+
+test part +FLAGS='-p year-2023-day-01':
+  cargo nextest run {{FLAGS}} {{part}}
+
+bench-all:
+  cargo bench -q > benchmarks.txt
+
+bench year day part: # just bench 2023 01 1
+  cargo bench \
+    --bench year-{{year}}-day-{{day}} part{{part}} >> {{year}}-{{day}}.bench.txt
+
+flamegraph year day part: # just flamegraph 2023 01 1
+  cargo flamegraph \
+    --profile flamegraph \
+    --root \
+    --package year-{{year}}-day-{{day}} \
+    --bin part{{part}} \
+    -o flamegraphs/{{year}}-{{day}}-{{part}}.svg
+
+dhat year day part: # just dhat 2023 01 1
+  cargo run \
+    --profile dhat --features dhat-heap \
+    --package year-{{year}}-day-{{day}} \
+    --bin part{{part}}
+
+create year day: # just create 2023 01
+  (cd {{year}} && \
+    cargo generate \
+      --path ../daily-template \
+      --name year-{{year}}-day-{{day}})
