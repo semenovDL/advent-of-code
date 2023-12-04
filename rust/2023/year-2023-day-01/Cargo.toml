@@ -4,11 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+nom = { workspace = true }
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 miette = { workspace = true }
 thiserror = { workspace = true }
 dhat = { workspace = true }
+nom_locate = { workspace = true }
 
 [dev-dependencies]
 criterion = { workspace = true }

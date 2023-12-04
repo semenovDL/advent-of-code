@@ -7,6 +7,11 @@ work year day part:
     -s "just bench {{year}} {{day}} {{part}}" \
     -s "just flamegraph {{year}} {{day}} {{part}}"
 
+run year day part:
+  cargo run \
+    --package year-{{year}}-day-{{day}} \
+    --bin part{{part}}
+
 lint year day:
   cargo clippy -p year-{{year}}-day-{{day}}
 
@@ -18,7 +23,7 @@ bench-all:
 
 bench year day part: # just bench 2023 01 1
   cargo bench \
-    --bench year-{{year}}-day-{{day}} part{{part}} >> {{year}}-{{day}}.bench.txt
+    --bench year-{{year}}-day-{{day}}-bench part{{part}} >> {{year}}-{{day}}.bench.txt
 
 flamegraph year day part: # just flamegraph 2023 01 1
   cargo flamegraph \
